@@ -1,3 +1,4 @@
+// src/main/java/org/demo/service/PasienService.java
 package org.demo.service;
 
 import org.demo.model.Pasien;
@@ -19,12 +20,14 @@ public class PasienService {
     @Transactional
     public Pasien registerNewPasien(Pasien pasien) {
         // Cek duplikasi jika NIM ada dan mahasiswa unida
+        // Catatan: Jika nim kosong atau bukan mahasiswa Unida, pengecekan ini dilewati
         if (Boolean.TRUE.equals(pasien.getIsMahasiswaUnida()) && pasien.getNim() != null && !pasien.getNim().isEmpty()) {
             if (pasienRepository.findByNim(pasien.getNim()).isPresent()) {
                 throw new RuntimeException("Pasien dengan NIM " + pasien.getNim() + " sudah terdaftar.");
             }
         }
         // Cek duplikasi untuk pasien umum berdasarkan nama dan tanggal lahir
+        // (Ini penting untuk kasus di mana NIM tidak ada atau pasien bukan mahasiswa)
         if (pasienRepository.findByNamaAndTanggalLahir(pasien.getNama(), pasien.getTanggalLahir()).isPresent()) {
             throw new RuntimeException("Pasien dengan nama dan tanggal lahir tersebut sudah terdaftar.");
         }
@@ -40,11 +43,33 @@ public class PasienService {
         return pasienRepository.findByNim(nim);
     }
 
-    public Optional<Pasien> findPasienByNamaAndTanggalLahir(String nama, LocalDate tanggalLahir) {
+    public Optional<Pasien> findPasienByNamaAndTanggalLahir(String nama, String tanggalLahir) {
         return pasienRepository.findByNamaAndTanggalLahir(nama, tanggalLahir);
     }
 
     public List<Pasien> getAllPasien() {
         return pasienRepository.findAll();
+    }
+
+    /**
+     * Metode untuk melakukan login pasien berdasarkan NIM (username) dan Tanggal Lahir (password).
+     * @param nim NIM pasien (username)
+     * @param tanggalLahirString Tanggal Lahir pasien dalam format String (password)
+     * @return Objek Pasien jika kredensial benar, null jika salah.
+     */
+    public Pasien loginPasien(String nim, String tanggalLahirString) {
+        Optional<Pasien> pasienOptional = pasienRepository.findByNim(nim);
+
+        if (pasienOptional.isPresent()) {
+            Pasien pasien = pasienOptional.get();
+            // Konversi tanggalLahir dari Pasien menjadi String untuk perbandingan
+            // Format yang digunakan harus konsisten, misalnya "YYYY-MM-DD"
+            String storedTanggalLahirString = pasien.getTanggalLahir().toString();
+
+            if (storedTanggalLahirString.equals(tanggalLahirString)) {
+                return pasien; // Login berhasil
+            }
+        }
+        return null; // Login gagal (NIM tidak ditemukan atau Tanggal Lahir salah)
     }
 }

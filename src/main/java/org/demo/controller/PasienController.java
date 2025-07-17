@@ -35,7 +35,7 @@ public class PasienController {
     public ResponseEntity<?> searchPasien(
             @RequestParam(required = false) String nim,
             @RequestParam(required = false) String nama,
-            @RequestParam(required = false) LocalDate tanggalLahir) {
+            @RequestParam(required = false) String tanggalLahir) {
 
         if (nim != null && !nim.isEmpty()) {
             Optional<Pasien> pasienOptional = pasienService.findPasienByNim(nim);

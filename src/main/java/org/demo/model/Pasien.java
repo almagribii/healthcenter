@@ -18,7 +18,7 @@ public class Pasien {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nama;
-    private LocalDate tanggalLahir;
+    private String tanggalLahir;
     private String alamat;
     private String nomorTelepon;
     private Boolean isMahasiswaUnida; // True jika mahasiswa Unida

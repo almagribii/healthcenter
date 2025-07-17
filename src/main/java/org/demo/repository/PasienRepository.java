@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface PasienRepository extends JpaRepository<Pasien, Long> {
     Optional<Pasien> findByNim(String nim);
-    Optional<Pasien> findByNamaAndTanggalLahir(String nama, LocalDate tanggalLahir);
+    Optional<Pasien> findByNamaAndTanggalLahir(String nama, String tanggalLahir);
 }
