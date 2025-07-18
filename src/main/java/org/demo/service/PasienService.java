@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
+// Hapus import java.time.LocalDate jika tidak lagi digunakan
 import java.util.List;
 import java.util.Optional;
 
@@ -20,15 +20,14 @@ public class PasienService {
     @Transactional
     public Pasien registerNewPasien(Pasien pasien) {
         // Cek duplikasi jika NIM ada dan mahasiswa unida
-        // Catatan: Jika nim kosong atau bukan mahasiswa Unida, pengecekan ini dilewati
         if (Boolean.TRUE.equals(pasien.getIsMahasiswaUnida()) && pasien.getNim() != null && !pasien.getNim().isEmpty()) {
             if (pasienRepository.findByNim(pasien.getNim()).isPresent()) {
                 throw new RuntimeException("Pasien dengan NIM " + pasien.getNim() + " sudah terdaftar.");
             }
         }
-        // Cek duplikasi untuk pasien umum berdasarkan nama dan tanggal lahir
-        // (Ini penting untuk kasus di mana NIM tidak ada atau pasien bukan mahasiswa)
-        if (pasienRepository.findByNamaAndTanggalLahir(pasien.getNama(), pasien.getTanggalLahir()).isPresent()) {
+        // Cek duplikasi untuk pasien umum berdasarkan nama dan tanggal lahir (String)
+        List<Pasien> existingPasien = pasienRepository.findByNamaAndTanggalLahir(pasien.getNama(), pasien.getTanggalLahir());
+        if (!existingPasien.isEmpty()) {
             throw new RuntimeException("Pasien dengan nama dan tanggal lahir tersebut sudah terdaftar.");
         }
 
@@ -43,7 +42,8 @@ public class PasienService {
         return pasienRepository.findByNim(nim);
     }
 
-    public Optional<Pasien> findPasienByNamaAndTanggalLahir(String nama, String tanggalLahir) {
+    // Ubah parameter tanggalLahir menjadi String
+    public List<Pasien> findPasienByNamaAndTanggalLahir(String nama, String tanggalLahir) {
         return pasienRepository.findByNamaAndTanggalLahir(nama, tanggalLahir);
     }
 
@@ -62,9 +62,8 @@ public class PasienService {
 
         if (pasienOptional.isPresent()) {
             Pasien pasien = pasienOptional.get();
-            // Konversi tanggalLahir dari Pasien menjadi String untuk perbandingan
-            // Format yang digunakan harus konsisten, misalnya "YYYY-MM-DD"
-            String storedTanggalLahirString = pasien.getTanggalLahir().toString();
+            // Perbandingan langsung sebagai String
+            String storedTanggalLahirString = pasien.getTanggalLahir(); // Ini sudah String
 
             if (storedTanggalLahirString.equals(tanggalLahirString)) {
                 return pasien; // Login berhasil

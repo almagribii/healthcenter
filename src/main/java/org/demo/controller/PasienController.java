@@ -1,3 +1,4 @@
+// src/main/java/org/demo/controller/PasienController.java
 package org.demo.controller;
 
 import org.demo.model.Pasien;
@@ -7,7 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
+// Hapus import java.time.LocalDate jika tidak lagi digunakan
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -35,19 +36,19 @@ public class PasienController {
     public ResponseEntity<?> searchPasien(
             @RequestParam(required = false) String nim,
             @RequestParam(required = false) String nama,
-            @RequestParam(required = false) String tanggalLahir) {
+            @RequestParam(required = false) String tanggalLahir) { // Ubah parameter ini menjadi String
 
         if (nim != null && !nim.isEmpty()) {
             Optional<Pasien> pasienOptional = pasienService.findPasienByNim(nim);
             if (pasienOptional.isPresent()) {
-                return ResponseEntity.ok(pasienOptional.get()); // Return Pasien object directly
+                return ResponseEntity.ok(pasienOptional.get());
             } else {
                 return new ResponseEntity<>(Map.of("message", "Pasien dengan NIM " + nim + " tidak ditemukan."), HttpStatus.NOT_FOUND);
             }
         } else if (nama != null && !nama.isEmpty() && tanggalLahir != null) {
-            Optional<Pasien> pasienOptional = pasienService.findPasienByNamaAndTanggalLahir(nama, tanggalLahir);
-            if (pasienOptional.isPresent()) {
-                return ResponseEntity.ok(pasienOptional.get()); // Return Pasien object directly
+            List<Pasien> pasienList = pasienService.findPasienByNamaAndTanggalLahir(nama, tanggalLahir); // Panggil dengan String
+            if (!pasienList.isEmpty()) {
+                return ResponseEntity.ok(pasienList); // Mengembalikan List
             } else {
                 return new ResponseEntity<>(Map.of("message", "Pasien dengan nama dan tanggal lahir tersebut tidak ditemukan."), HttpStatus.NOT_FOUND);
             }
