@@ -17,14 +17,14 @@ public class RekamMedis {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne // Hubungan banyak rekam medis ke satu pasien
+    @ManyToOne
     @JoinColumn(name = "pasien_id", nullable = false)
     private Pasien pasien;
 
     private String keluhan;
     private String diagnosa;
     private String tindakan;
-    private String resep; // Resep akan disimpan sebagai teks sederhana untuk kesederhanaan
+    private String resep;
 
     private LocalDateTime tanggalKonsultasi;
 

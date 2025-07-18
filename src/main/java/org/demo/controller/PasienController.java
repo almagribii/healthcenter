@@ -20,7 +20,6 @@ public class PasienController {
     @Autowired
     private PasienService pasienService;
 
-    // POST: /api/pasien (Untuk Pendaftaran Pasien Baru)
     @PostMapping
     public ResponseEntity<?> registerPasien(@RequestBody Pasien pasien) {
         try {
@@ -31,7 +30,6 @@ public class PasienController {
         }
     }
 
-    // GET: /api/pasien/search?nim=... OR /api/pasien/search?nama=...&tanggalLahir=... (Cari Data Pasien Lama)
     @GetMapping("/search")
     public ResponseEntity<?> searchPasien(
             @RequestParam(required = false) String nim,
@@ -57,7 +55,6 @@ public class PasienController {
         }
     }
 
-    // GET: /api/pasien/{id} (Untuk mendapatkan detail pasien setelah pendaftaran/pencarian selesai)
     @GetMapping("/{id}")
     public ResponseEntity<Pasien> getPasienById(@PathVariable Long id) {
         return pasienService.findPasienById(id)
@@ -65,7 +62,6 @@ public class PasienController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    // GET: /api/pasien (Dapatkan semua pasien)
     @GetMapping
     public List<Pasien> getAllPasien() {
         return pasienService.getAllPasien();

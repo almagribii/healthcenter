@@ -17,7 +17,6 @@ public class RekamMedisController {
     @Autowired
     private RekamMedisService rekamMedisService;
 
-    // POST: /api/rekam-medis/{pasienId} (Catat RME)
     @PostMapping("/{pasienId}")
     public ResponseEntity<?> createRekamMedis(@PathVariable Long pasienId, @RequestBody RekamMedis rekamMedis) {
         try {
@@ -28,7 +27,6 @@ public class RekamMedisController {
         }
     }
 
-    // GET: /api/rekam-medis/{id} (Lihat RME berdasarkan ID)
     @GetMapping("/{id}")
     public ResponseEntity<RekamMedis> getRekamMedisById(@PathVariable Long id) {
         return rekamMedisService.getRekamMedisById(id)
@@ -36,13 +34,11 @@ public class RekamMedisController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    // GET: /api/rekam-medis/pasien/{pasienId} (Lihat semua RME untuk pasien tertentu)
     @GetMapping("/pasien/{pasienId}")
     public List<RekamMedis> getRekamMedisByPasienId(@PathVariable Long pasienId) {
         return rekamMedisService.getRekamMedisByPasienId(pasienId);
     }
 
-    // PUT: /api/rekam-medis/{id} (Update RME)
     @PutMapping("/{id}")
     public ResponseEntity<?> updateRekamMedis(@PathVariable Long id, @RequestBody RekamMedis rekamMedis) {
         try {

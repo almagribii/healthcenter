@@ -18,7 +18,7 @@ public class RekamMedisService {
     private RekamMedisRepository rekamMedisRepository;
 
     @Autowired
-    private PasienRepository pasienRepository; // Untuk memastikan Pasien ada
+    private PasienRepository pasienRepository;
 
     @Transactional
     public RekamMedis createRekamMedis(Long pasienId, RekamMedis rekamMedis) {
@@ -46,7 +46,6 @@ public class RekamMedisService {
                     existingRekamMedis.setDiagnosa(updatedRekamMedis.getDiagnosa());
                     existingRekamMedis.setTindakan(updatedRekamMedis.getTindakan());
                     existingRekamMedis.setResep(updatedRekamMedis.getResep());
-                    // Tanggal konsultasi bisa diupdate atau tidak, tergantung kebutuhan
                     if (updatedRekamMedis.getTanggalKonsultasi() != null) {
                         existingRekamMedis.setTanggalKonsultasi(updatedRekamMedis.getTanggalKonsultasi());
                     }

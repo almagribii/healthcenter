@@ -18,20 +18,17 @@ public class ObatController {
     @Autowired
     private ObatService obatService;
 
-    // POST: /api/obat (Input Stok Obat Baru)
     @PostMapping
     public ResponseEntity<Obat> addObat(@RequestBody Obat obat) {
         Obat newObat = obatService.addObat(obat);
         return new ResponseEntity<>(newObat, HttpStatus.CREATED);
     }
 
-    // GET: /api/obat (Pantau Stok - Dapatkan semua obat)
     @GetMapping
     public List<Obat> getAllObat() {
         return obatService.getAllObat();
     }
 
-    // GET: /api/obat/{id} (Pantau Stok - Dapatkan detail obat tertentu)
     @GetMapping("/{id}")
     public ResponseEntity<Obat> getObatById(@PathVariable Long id) {
         return obatService.getObatById(id)
@@ -39,20 +36,17 @@ public class ObatController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    // PUT: /api/obat/{id}/add-stok?quantity=X (Update Stok - Tambah)
     @PutMapping("/{id}/add-stok")
     public ResponseEntity<?> addStokObat(@PathVariable Long id, @RequestParam Integer quantity) {
         try {
             Obat updatedObat = obatService.updateStokObat(id, quantity);
             return ResponseEntity.ok(updatedObat);
         } catch (RuntimeException e) {
-            // Karena updateStokObat hanya melempar RuntimeException (jika obat tidak ditemukan atau stok kurang),
-            // kita bisa menangani di sini.
+
             return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
 
-    // PUT: /api/obat/{id}/dispense?quantity=X (Pemberian Obat - Kurangi Stok Otomatis)
     @PutMapping("/{id}/dispense")
     public ResponseEntity<?> dispenseObat(@PathVariable Long id, @RequestParam Integer quantity) {
         try {
@@ -65,7 +59,7 @@ public class ObatController {
         }
     }
 
-    @PostMapping("/batch") // Endpoint baru untuk banyak obat
+    @PostMapping("/batch")
     public ResponseEntity<List<Obat>> addMultipleObat(@RequestBody List<Obat> obatList) {
         List<Obat> newObatList = obatService.addMultipleObat(obatList);
         return new ResponseEntity<>(newObatList, HttpStatus.CREATED);

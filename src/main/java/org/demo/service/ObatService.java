@@ -41,7 +41,6 @@ public class ObatService {
                 }).orElseThrow(() -> new RuntimeException("Obat dengan ID " + id + " tidak ditemukan."));
     }
 
-    // Metode untuk mengurangi stok saat obat diambil (Pemberian Obat)
     @Transactional
     public Obat dispenseObat(Long obatId, Integer quantity) {
         if (quantity <= 0) {
@@ -51,7 +50,6 @@ public class ObatService {
     }
     @Transactional
     public List<Obat> addMultipleObat(List<Obat> obatList) {
-        // Loop melalui setiap obat dalam daftar dan simpan
-        return obatRepository.saveAll(obatList); // saveAll() adalah metode Spring Data JPA
+        return obatRepository.saveAll(obatList);
     }
 }

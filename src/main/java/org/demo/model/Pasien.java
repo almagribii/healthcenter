@@ -21,8 +21,8 @@ public class Pasien {
     private String tanggalLahir;
     private String alamat;
     private String nomorTelepon;
-    private Boolean isMahasiswaUnida; // True jika mahasiswa Unida
-    private String nim; // Nomor Induk Mahasiswa
+    private Boolean isMahasiswaUnida;
+    private String nim;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
